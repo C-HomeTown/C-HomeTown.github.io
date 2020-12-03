@@ -1,94 +1,57 @@
-// MIXINS
-// --------------------------------------------------
+// Copyright (c) 2017 Florian Klampfer <https://qwtel.com/>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
-%tab-focus {
-	// Default
-	outline: thin dotted #333;
-	// Webkit
-	outline: 5px auto -webkit-focus-ring-color;
-	outline-offset: -2px;
+@mixin pre($padding: 1rem) {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: $padding;
+  background-color: $code-bg;
+
+  @media print {
+    width: 100%!important;
+    page-break-inside: avoid;
+    break-inside: avoid-page;
+  }
 }
 
+@mixin aspect-ratio($width, $height) {
+  position: relative;
 
-//  Typography
-// --------------------------------------------------
+  &::before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
 
-/*  Vertical Rhythm
-	https://github.com/sturobson/Sassifaction
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
 
-	In this mixin you can specify the font size in PX and 
-	it will calculate the REM based on your $doc-font-size 
-	& $doc-line-height variables. 
-
-		@include font-size(24);
-
-	It will also create a bottom margin based on the 
-	$doc-font-size & $doc-line-height variables unless you 
-	specify that it shouldn't have one.
-
-		@include font-size(24, no);
-
-	Or if you want to specify a different bottom margin to 
-	be generated.
-
-		@include font-size(24,32);
-
-	This mixin also generates a pixel-less line height by 
-	default unless you specify that you either don't want 
-	one where I'd suggest declaring 1 within the mixin.
-
-		@include font-size(24, yes, 1);
-
-	There's also the option to specify a different line-height 
-	for it to generate to, where you would specify the 
-	line-height in (effectively) it's pixel value.
-
-		@include font-size(24, yes, 40);
-*/
-
-@mixin font-size($size, $margin: yes, $line-height: $doc-line-height) {
-		
-	// generates the font-size in REMs with a PX fallback
-	font-size: 0px + $size;
-	font-size: 0rem + $size / $doc-font-size;
-
-	// line-height functions
-	////////////////////////
-
-	// if you a line-height is specified in the mixin
-	@if $line-height != $doc-line-height and $line-height != 1 {
-		line-height: ceil($size / $line-height) * ($line-height / $size);
-	}
-	
-	// if $line-height == 1
-	// because, typing 1 is quicker than 16
-	@else if $line-height == 1 {
-		line-height: 1;
-	}
-
-	// normal $line-height
-	// if the line-height is left.
-	@else {
-		line-height: ceil($size / $doc-line-height) * ($doc-line-height / $size);
-	}
-
-	// margin-bottom functions
-	//////////////////////////
-
-	// if no is bottom margin is required
-	@if $margin == no {
-		margin-bottom: 0;  
-	}  
-	
-	// if a specific bottom margin is required
-	@else if $margin != yes and $margin != no {
-		margin-bottom: 0px + $margin;
-		margin-bottom: 0rem + ($margin / $doc-font-size);  
-	}
-
-	// if you're keeping the vertical rhythm with the margin
-	@else {
-		margin-bottom: 0px + $doc-line-height;
-		margin-bottom: 0rem + ($doc-line-height / $doc-font-size);  
-	}
+@mixin clearfix() {
+  content: "";
+  display: table;
+  clear: both;
 }
